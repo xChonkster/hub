@@ -46,11 +46,14 @@ local effects; effects = {
 
 	end,
 
-	button = function(button)
+	button = function(button, zindex)
 		local p = button.Parent
 
 		button.MouseButton1Down:Connect(function(x, y)
 			local new_effect = effects.button_click:Clone()
+			if zindex then
+				new_effect.ZIndex = zindex
+			end
 
 			local pos = (Vector2.new(effects.mouse.X, effects.mouse.Y) - p.AbsolutePosition)
 			new_effect.Position = UDim2.new(0, pos.X, 0, pos.Y)
@@ -84,7 +87,10 @@ local effects; effects = {
 			mouse_hover = true
 
 			local effect_clone = effects.mouse_enter:Clone()
-
+			if zindex then
+				effect_clone.ZIndex = zindex
+			end
+				
 			effect_clone.Parent = p
 
 			effects.ts:Create(
