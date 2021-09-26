@@ -59,6 +59,7 @@ old_new_index = meta.main.__newindex.append(function(...)
 		if hook and type == spoof.types.impersonator and self == hook.instance and idx == hook.property then
 			if checkcaller() then
 				hook.real = val
+				return old_new_index(...)
 			end
 			hook.fake = val
 			
