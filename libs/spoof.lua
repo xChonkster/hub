@@ -36,8 +36,7 @@ end
 
 local old_index;
 old_index = meta.main.__index.append(function(...)
-	local tbl = {...}
-	local self, idx = tbl[1], tbl[2]
+	local self, idx = ...
 	
 	for type, hook in pairs(spoof.hooks) do
 		if hook and type == spoof.types.impersonator and self == hook.instance and idx == hook.property then
@@ -50,11 +49,13 @@ end)
 
 local old_new_index;
 old_new_index = meta.main.__newindex.append(function(...)
-	local tbl = {...}
-	local self, idx, val = tbl[1], tbl[2], tbl[3]
+	local self, idx, val = ...
 	
 	for type, hook in pairs(spoof.hooks) do
 		if hook and type == spoof.types.impersonator and self == hook.instance and idx == hook.property then
+			if checkcaller() then
+				hook.real = val
+			end
 			hook.fake = val
 			
 			return old_new_index(self, idx, hook.real)
