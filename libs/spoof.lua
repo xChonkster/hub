@@ -38,6 +38,10 @@ local old_index;
 old_index = meta.main.__index.append(function(...)
 	local self, idx = ...
 	
+	if checkcaller() then
+		return old_index(...)	
+	end
+		
 	for type, hook in pairs(spoof.hooks) do
 		if hook and type == spoof.types.impersonator and self == hook.instance and idx == hook.property then
 			return hook.fake
